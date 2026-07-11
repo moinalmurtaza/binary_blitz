@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ─── Core Backgrounds ────────────────── */
+    --background:          #26292D;
+    --foreground:          #F2F2F2;
+    --card:                #33363B;
+    --card-foreground:     #F2F2F2;
+    --border:              #4B4F55;
+    --surface-light:       #FAF7F2;
+    --border-light:        #D9D0C4;
+
+    /* ─── Sidebar ─────────────────────────── */
+    --activity-bar-bg:     #0a0a0a;
+    --sidebar-bg:          #0a0a0a;
+    --sidebar-hover:       #1a1c1f;
+    --sidebar-text-secondary: #C8C8C8;
+    --sidebar-text-muted:  #9A9A9A;
+
+    /* ─── Harvard Crimson Accent ──────────── */
+    --sidebar-accent:         #A41034;
+    --sidebar-accent-hover:   #C4122F;
+    --accent:                 #A41034;
+    --accent-hover:           #C4122F;
+    --accent-dark:            #7A0C24;
+    --accent-soft:            rgba(164, 16, 52, 0.12);
+    --border-crimson:         #A41034;
+
+    /* ─── Harvard Navy ────────────────────── */
+    --navy:                #1D2440;
+    --navy-soft:           rgba(29, 36, 64, 0.08);
+
+    /* ─── Semantic ────────────────────────── */
+    --success:             #2E7D32;
+    --warning:             #B45309;
+    --error:               #A41034;
+    --info:                #1D4ED8;
+
+    /* ─── Typography ──────────────────────── */
+    --font-serif:  'EB Garamond', 'Garamond', 'Georgia', serif;
+    --font-sans:   'Inter', 'Helvetica Neue', 'Arial', sans-serif;
+    --font-mono:   'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  .light {
+    --background:           #FAF7F2;
+    --foreground:           #1A1A1A;
+    --card:                 #FFFFFF;
+    --card-foreground:      #1A1A1A;
+    --border:               #D9D0C4;
+    --activity-bar-bg:      #F0EBE3;
+    --sidebar-bg:           #F0EBE3;
+    --sidebar-hover:        #E8E0D8;
+    --sidebar-accent:       #A41034;
+    --sidebar-accent-hover: #C4122F;
+    --sidebar-text-secondary: #4A4A4A;
+    --sidebar-text-muted:   #6B6B6B;
+  }
+
+  /* ─── Body Defaults ───────────────────────────── */
+  body {
+    font-family: var(--font-sans);
+    @apply bg-background text-foreground antialiased;
+    background-image: none;
+    min-height: 100vh;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+  }
+
+  /* ─── Headings use Garamond ───────────────────── */
+  h1, h2 {
+    font-family: var(--font-serif);
+  }
+  h1 {
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  h2 {
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  /* ─── Harvard label style (uppercase caps) ────── */
+  .label-caps {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+}
+
+/* ── Sidebar Scrollbar ────────────────────────────── */
+.sidebar-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.sidebar-scrollbar:hover {
+  scrollbar-color: var(--border) transparent;
+}
+.sidebar-scrollbar::-webkit-scrollbar { width: 4px; }
+.sidebar-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 9999px;
+  transition: background-color 0.25s ease;
+}
+.sidebar-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+/* ── Glass — only for overlays / dropdowns ────────── */
+.glass {
+  background: rgba(38, 41, 45, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(164, 16, 52, 0.1);
+}
+.light .glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(164, 16, 52, 0.12);
+}
+
+/* ── Harvard Glow — Crimson accent ───────────────── */
+.glow-hover {
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.glow-hover:hover {
+  box-shadow: 0 0 18px rgba(164, 16, 52, 0.15);
+  border-color: rgba(164, 16, 52, 0.35) !important;
+}
+
+/* ── Harvard Card — flat, no glassmorphism ────────── */
+.harvard-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.harvard-card:hover {
+  border-color: rgba(164, 16, 52, 0.4);
+  box-shadow: 0 4px 24px rgba(164, 16, 52, 0.08);
+}
+
+/* ── Crimson accent top strip ────────────────────── */
+.crimson-strip::before {
+  content: '';
+  display: block;
+  height: 2px;
+  background: #A41034;
+  width: 100%;
+}
+
+/* ── Harvard Divider ─────────────────────────────── */
+.harvard-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.harvard-divider::before {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.harvard-divider::after {
+  content: '';
+  width: 2rem;
+  height: 2px;
+  background: #A41034;
+}
+
+/* ── Crimson Button ──────────────────────────────── */
+.btn-crimson {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.25rem;
+  background: #A41034;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  letter-spacing: 0.02em;
+}
+.btn-crimson:hover { background: #C4122F; }
+.btn-crimson:active { background: #7A0C24; }
+
+/* ── Outlined Ghost Button (Harvard.edu style) ────── */
+.btn-outline-crimson {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #A41034;
+  color: #A41034;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-outline-crimson:hover {
+  background: #A41034;
+  color: #fff;
+}
+
+/* ── Rating breathing glow ───────────────────────── */
+@keyframes rating-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(164, 16, 52, 0.3);
+    text-shadow: 0 0 5px rgba(164, 16, 52, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(164, 16, 52, 0.65);
+    text-shadow: 0 0 12px rgba(164, 16, 52, 0.65);
+  }
+}
+.rating-legendary {
+  animation: rating-glow 3s infinite ease-in-out;
+  border: 1px solid rgba(164, 16, 52, 0.4);
+}
+
+/* ── Global scrollbar ────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #5A5E64; }
+
+/* ── Snappy, highly responsive transitions for UI elements ── */
+a, button, input, select, textarea, .harvard-card, .btn-crimson, .btn-outline-crimson, [role="button"] {
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+}

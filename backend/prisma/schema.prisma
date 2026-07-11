@@ -1,0 +1,388 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  TRAINER
+  STUDENT
+  ALUMNI
+  GUEST
+}
+
+enum Category {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ICPC_TEAM
+  TRAINER
+  ALUMNI
+  EXECUTIVE_MEMBER
+  CLUB_MEMBER
+  TOP_PERFORMER
+  PROBLEM_SETTER
+  VOLUNTEER
+}
+
+enum SubmissionStatus {
+  PENDING
+  RUNNING
+  ACCEPTED
+  WRONG_ANSWER
+  TIME_LIMIT_EXCEEDED
+  MEMORY_LIMIT_EXCEEDED
+  RUNTIME_ERROR
+  COMPILATION_ERROR
+  PRESENTATION_ERROR
+}
+
+enum ResourceType {
+  BOOK
+  SLIDES
+  LECTURE_NOTE
+  VIDEO
+  TEMPLATE
+  ALGORITHM
+}
+
+enum ContestStatus {
+  UPCOMING
+  RUNNING
+  FROZEN
+  ENDED
+}
+
+model Profile {
+  id                String             @id // references auth.users.id (provided by Supabase Auth)
+  email             String             @unique
+  name              String             @map("full_name")
+  username          String?            @unique
+  passwordHash      String?            @map("password_hash") // Optional, since we use Supabase Auth
+  role              Role               @default(STUDENT)
+  category          Category           @default(BEGINNER)
+  handleCodeforces  String?            @map("handle_codeforces")
+  handleGithub      String?            @map("handle_github")
+  handleLinkedin    String?            @map("handle_linkedin")
+  bio               String?
+  avatarUrl         String?            @map("avatar_url")
+  rating            Int                @default(0)
+  
+  // Schedule Progression Tracker
+  batch             String?
+  currentPhase      String?            @map("current_phase")
+  currentWeek       Int?               @map("current_week")
+  currentDay        Int?               @map("current_day")
+  status            String?
+  
+  // Legacy sub-profile fields (merged for simplicity and backward compatibility)
+  university        String             @default("North Western University")
+  department        String?
+  achievements      String[]
+  resumeUrl         String?
+  certificates      String[]
+
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+
+  trainerProfile    TrainerProfile?
+  alumniProfile     AlumniProfile?
+  submissions       Submission[]
+  ratingHistory     RatingHistory[]
+  createdProblems   Problem[]          @relation("ProblemCreator")
+  createdContests   Contest[]          @relation("ContestCreator")
+  sentMessages      ChatMessage[]      @relation("SentMessages")
+  receivedMessages  ChatMessage[]      @relation("ReceivedMessages")
+  notifications     Notification[]
+  auditLogs         AuditLog[]
+  clarifications    Clarification[]
+  resourcesUploaded Resource[]
+  announcements     Announcement[]
+  studentProgress   StudentProgress[]
+
+  @@index([email])
+  @@index([role])
+  @@map("profiles")
+}
+
+model TrainerProfile {
+  id               String   @id @default(uuid())
+  profileId        String   @unique @map("profile_id")
+  profile          Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  research         String?
+  publications     String[]
+  officeHours      String?
+  teachingSubjects String[]
+  
+  @@map("trainer_profiles")
+}
+
+model AlumniProfile {
+  id             String   @id @default(uuid())
+  profileId      String   @unique @map("profile_id")
+  profile        Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  currentCompany String?  @map("current_company")
+  timeline       Json?
+  mentorshipOpen Boolean  @default(false) @map("mentorship_open")
+  
+  @@map("alumni_profiles")
+}
+
+model Problem {
+  id              String             @id @default(uuid())
+  title           String
+  statement       String             @db.Text
+  constraints     String             @db.Text
+  timeLimitMs     Int                @default(1000)
+  memoryLimitMb   Int                @default(256)
+  difficulty      String
+  tags            String[]
+  solvedCount     Int                @default(0)
+  editorial       String?            @db.Text
+  testCases       Json
+  creatorId       String
+  creator         Profile            @relation("ProblemCreator", fields: [creatorId], references: [id])
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  submissions     Submission[]
+  contestProblems ContestProblem[]
+
+  @@index([difficulty])
+}
+
+model Contest {
+  id              String             @id @default(uuid())
+  title           String
+  description     String?            @db.Text
+  startTime       DateTime
+  endTime         DateTime
+  durationSeconds Int
+  freezeTimeMs    Int                @default(0)
+  status          ContestStatus      @default(UPCOMING)
+  creatorId       String
+  creator         Profile            @relation("ContestCreator", fields: [creatorId], references: [id])
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  problems        ContestProblem[]
+  submissions     Submission[]
+  clarifications  Clarification[]
+  announcements   Announcement[]
+
+  @@index([status])
+}
+
+model ContestProblem {
+  id         String   @id @default(uuid())
+  contestId  String
+  contest    Contest  @relation(fields: [contestId], references: [id], onDelete: Cascade)
+  problemId  String
+  problem    Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  alias      String
+  score      Int      @default(100)
+
+  @@unique([contestId, problemId])
+}
+
+model Submission {
+  id            String           @id @default(uuid())
+  userId        String
+  user          Profile          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problemId     String
+  problem       Problem          @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  contestId     String?
+  contest       Contest?         @relation(fields: [contestId], references: [id], onDelete: SetNull)
+  language      String
+  code          String           @db.Text
+  status        SubmissionStatus @default(PENDING)
+  runTimeMs     Int?
+  memoryUsedKb  Int?
+  errorFeedback String?          @db.Text
+  submittedAt   DateTime         @default(now())
+
+  @@index([userId])
+  @@index([problemId])
+  @@index([status])
+}
+
+model RatingHistory {
+  id         String   @id @default(uuid())
+  userId     String
+  user       Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contestId  String
+  oldRating  Int
+  newRating  Int
+  changeTime DateTime @default(now())
+}
+
+model Clarification {
+  id        String   @id @default(uuid())
+  contestId String
+  contest   Contest  @relation(fields: [contestId], references: [id], onDelete: Cascade)
+  userId    String
+  user      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question  String   @db.Text
+  answer    String?  @db.Text
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Resource {
+  id              String       @id @default(uuid())
+  title           String
+  type            ResourceType
+  fileUrl         String?
+  markdownContent String?      @db.Text
+  authorId        String
+  author          Profile      @relation(fields: [authorId], references: [id])
+  category        String
+  tags            String[]
+  downloads       Int          @default(0)
+  createdAt       DateTime     @default(now())
+}
+
+model Announcement {
+  id        String   @id @default(uuid())
+  title     String
+  content   String   @db.Text
+  isGlobal  Boolean  @default(true)
+  contestId String?
+  contest   Contest? @relation(fields: [contestId], references: [id], onDelete: Cascade)
+  creatorId String
+  creator   Profile  @relation(fields: [creatorId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Event {
+  id                     String   @id @default(uuid())
+  title                  String
+  description            String?  @db.Text
+  startTime              DateTime
+  endTime                DateTime
+  type                   String
+  meetLink               String?
+  googleCalendarEventId  String?
+}
+
+model ChatMessage {
+  id          String   @id @default(uuid())
+  senderId    String
+  sender      Profile  @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientId String?
+  recipient   Profile? @relation("ReceivedMessages", fields: [recipientId], references: [id], onDelete: Cascade)
+  roomId      String
+  message     String   @db.Text
+  createdAt   DateTime @default(now())
+
+  @@index([roomId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String
+  details   String?  @db.Text
+  ipAddress String?
+  createdAt DateTime @default(now())
+}
+
+model Phase {
+  id          String            @id @default(uuid())
+  title       String
+  description String?           @db.Text
+  phaseOrder  Int               @map("phase_order")
+  startDate   DateTime          @map("start_date")
+  endDate     DateTime          @map("end_date")
+  createdAt   DateTime          @default(now()) @map("created_at")
+  
+  weeks       Week[]
+  progress    StudentProgress[]
+
+  @@map("phases")
+}
+
+model Week {
+  id         String            @id @default(uuid())
+  phaseId    String            @map("phase_id")
+  phase      Phase             @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  weekNumber Int               @map("week_number")
+  startDate  DateTime          @map("start_date")
+  endDate    DateTime          @map("end_date")
+  createdAt  DateTime          @default(now()) @map("created_at")
+  
+  days       Day[]
+  progress   StudentProgress[]
+
+  @@map("weeks")
+}
+
+enum DayType {
+  Theory
+  Problem_Set    @map("Problem Set")
+  Preparation
+  Contest
+  Off_Day        @map("Off Day")
+}
+
+model Day {
+  id          String            @id @default(uuid())
+  weekId      String            @map("week_id")
+  week        Week              @relation(fields: [weekId], references: [id], onDelete: Cascade)
+  dayNumber   Int               @map("day_number") // 1 to 7
+  date        DateTime
+  type        DayType
+  title       String
+  description String?           @db.Text
+  status      String            // Locked, Upcoming, Published, Completed
+  
+  resources   DayResource[]
+  progress    StudentProgress[]
+
+  @@map("days")
+}
+
+model DayResource {
+  id           String            @id @default(uuid())
+  dayId        String            @map("day_id")
+  day          Day               @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  title        String
+  resourceType String            @map("resource_type") // Slide, PDF, Drive Link, YouTube, Problem Set, Contest Link, External URL, Notes
+  url          String
+  description  String?           @db.Text
+
+  @@map("day_resources")
+}
+
+model StudentProgress {
+  id          String            @id @default(uuid())
+  studentId   String            @map("student_id")
+  student     Profile           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  phaseId     String            @map("phase_id")
+  phase       Phase             @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  weekId      String            @map("week_id")
+  week        Week              @relation(fields: [weekId], references: [id], onDelete: Cascade)
+  dayId       String            @map("day_id")
+  day         Day               @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  completed   Boolean           @default(true)
+  completedAt DateTime          @default(now()) @map("completed_at")
+
+  @@unique([studentId, dayId])
+  @@map("student_progress")
+}
