@@ -251,7 +251,7 @@ export default function CourseRoadmapPage() {
         <div className="relative max-w-5xl mx-auto">
           <div className="flex items-center gap-2 mb-3">
             <BookOpen size={14} className="text-[#A41034]" />
-            <span className="text-[10px] font-bold tracking-[0.16em] uppercase text-[#A41034]">NWU CP Academy</span>
+            <span className="text-[10px] font-bold tracking-[0.16em] uppercase text-[#A41034]">Binary Blitz</span>
           </div>
           <h1 className="font-serif text-3xl font-bold text-white leading-tight mb-2">
             Course Roadmap

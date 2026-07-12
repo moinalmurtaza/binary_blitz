@@ -26,7 +26,7 @@ export default function CommunityPage() {
       category: 'TRAINER',
       rating: 2150,
       avatarUrl: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&h=150&q=80',
-      bio: 'Assistant Professor, CSE Dept. NWU Khulna. Passionate about graph algorithms and combinatorics.',
+      bio: 'Assistant Professor, CSE Dept. Passionate about graph algorithms and combinatorics. Club Trainer for Binary Blitz.',
       handleCodeforces: 'tourist',
       handleGithub: 'johndoe',
       officeHours: 'Mon/Wed 10:00 AM - 12:00 PM',
@@ -43,7 +43,7 @@ export default function CommunityPage() {
       category: 'ALUMNI',
       rating: 2380,
       avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&h=150&q=80',
-      bio: 'Ex-NWU CSE Graduate. Software Engineer at Google Munich. ICPC Dhaka Regional 2022 participant.',
+      bio: 'Software Engineer at Google Munich. ICPC Dhaka Regional 2022 participant. Binary Blitz Alumni.',
       handleCodeforces: 'ecnerwala',
       handleGithub: 'janesmith',
       handleLinkedin: 'janesmith-swe',
@@ -51,7 +51,7 @@ export default function CommunityPage() {
       mentorshipOpen: true,
       timeline: [
         { role: 'Software Engineer', company: 'Google', start: '2023', end: 'Present' },
-        { role: 'Research Assistant', company: 'NWU Khulna', start: '2022', end: '2023' }
+        { role: 'Research Assistant', company: 'Binary Blitz HQ', start: '2022', end: '2023' }
       ]
     }
   ];
@@ -101,7 +101,7 @@ export default function CommunityPage() {
                   />
                   <div>
                     <h3 className="text-lg font-bold text-zinc-100">{t.name}</h3>
-                    <p className="text-xs text-[#A41034] font-semibold mt-0.5">NWU Faculty / Club Trainer</p>
+                    <p className="text-xs text-[#A41034] font-semibold mt-0.5">Binary Blitz Faculty / Trainer</p>
                     <div className="flex gap-2 mt-2">
                       {t.handleCodeforces && (
                         <a href={`https://codeforces.com/profile/${t.handleCodeforces}`} target="_blank" rel="noreferrer" className="px-2 py-0.5 rounded bg-zinc-800 text-[10px] font-semibold text-zinc-400 hover:text-zinc-200">
@@ -156,7 +156,7 @@ export default function CommunityPage() {
               </div>
 
               <div className="mt-6 pt-4 border-t border-border/30 flex justify-end">
-                <a href={`mailto:${t.email || 'trainer@nwu.edu.bd'}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700/80 text-zinc-300 text-xs font-bold transition-all">
+                <a href={`mailto:${t.email || 'trainer@binaryblitz.dev'}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700/80 text-zinc-300 text-xs font-bold transition-all">
                   <Mail size={12} /> Contact Email
                 </a>
               </div>
@@ -210,7 +210,7 @@ export default function CommunityPage() {
                   </div>
                 </div>
 
-                <p className="text-xs text-zinc-400 mt-4 leading-relaxed">{a.bio || 'Google Engineer / NWU Alumni. Specializes in Algorithms and career guidance.'}</p>
+                <p className="text-xs text-zinc-400 mt-4 leading-relaxed">{a.bio || 'Binary Blitz Alumni. Specializes in Algorithms and career guidance.'}</p>
 
                 {/* Timeline */}
                 {a.timeline && (

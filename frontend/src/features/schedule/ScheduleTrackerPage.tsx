@@ -268,10 +268,12 @@ export default function ScheduleTrackerPage() {
   const progress = progressData || { totalDays: 0, completedDays: 0, remainingDays: 0, completionPercentage: 0, currentPhase: '—', currentWeek: 1, currentDay: 1 };
 
   // Initialize expanded phases
-  const phaseIds = phases.map(p => p.id);
-  if (phaseIds.length > 0 && Object.keys(expandedPhases).length === 0) {
-    setExpandedPhases(Object.fromEntries(phaseIds.map((id, i) => [id, i === 0])));
-  }
+  React.useEffect(() => {
+    const phaseIds = phases.map(p => p.id);
+    if (phaseIds.length > 0 && Object.keys(expandedPhases).length === 0) {
+      setExpandedPhases(Object.fromEntries(phaseIds.map((id, i) => [id, i === 0])));
+    }
+  }, [phases, expandedPhases]);
 
   const togglePhase = (id: string) => setExpandedPhases(prev => ({ ...prev, [id]: !prev[id] }));
 
@@ -508,12 +510,14 @@ export default function ScheduleTrackerPage() {
                       </div>
 
                       {/* Phase End Banner */}
-                      <div className="mx-6 mb-5 p-3 rounded-xl bg-gradient-to-r from-orange-500/5 to-yellow-500/5 border border-orange-500/10 flex items-center gap-2">
-                        <Trophy size={14} className="text-orange-400 shrink-0" />
-                        <p className="text-xs font-semibold text-zinc-400">
-                          Phase Final Contest + 1 Week Break → Phase {phase.phaseOrder + 1}
-                        </p>
-                      </div>
+                      {phaseIdx < phases.length - 1 && (
+                        <div className="mx-6 mb-5 p-3 rounded-xl bg-gradient-to-r from-orange-500/5 to-yellow-500/5 border border-orange-500/10 flex items-center gap-2">
+                          <Trophy size={14} className="text-orange-400 shrink-0" />
+                          <p className="text-xs font-semibold text-zinc-400">
+                            Phase Final Contest + 1 Week Break → Phase {phase.phaseOrder + 1}
+                          </p>
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>

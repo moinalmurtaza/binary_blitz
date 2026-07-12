@@ -17,7 +17,7 @@ export default function CalendarPage() {
   const events = [
     {
       id: 'evt-1',
-      title: 'Comptron Weekly Training Round #1',
+      title: 'Binary Blitz Weekly Training Round #1',
       description: 'Main weekly selection round for beginner and intermediate groups.',
       startTime: new Date(currentDate.getFullYear(), currentDate.getMonth(), 12, 18, 0).toISOString(),
       endTime: new Date(currentDate.getFullYear(), currentDate.getMonth(), 12, 21, 0).toISOString(),
@@ -83,12 +83,18 @@ export default function CalendarPage() {
     });
   };
 
+  const currentMonthEvents = events.filter(e => {
+    const eDate = new Date(e.startTime);
+    return eDate.getMonth() === currentDate.getMonth() &&
+           eDate.getFullYear() === currentDate.getFullYear();
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-zinc-100">Event Calendar</h1>
-          <p className="text-sm text-zinc-500 mt-1">NWU Comptron class, contests and selection milestones schedule</p>
+          <p className="text-sm text-zinc-500 mt-1">Binary Blitz class, contests and selection milestones schedule</p>
         </div>
 
         {/* Month Selector Controls */}
@@ -110,7 +116,7 @@ export default function CalendarPage() {
           <div className="grid grid-cols-7 gap-1.5">
             {calendarCells.map((cell, idx) => {
               if (cell === null) {
-                return <div key={`empty-${idx}`} className="aspect-square bg-zinc-950/20 border border-transparent rounded-lg" />;
+                return <div key={`empty-${idx}`} className="h-12 bg-zinc-950/20 border border-transparent rounded-lg" />;
               }
 
               const dayEvents = getEventsForDate(cell);
@@ -119,22 +125,25 @@ export default function CalendarPage() {
               return (
                 <div
                   key={`day-${cell.getDate()}`}
-                  className={`aspect-square p-1.5 border rounded-lg flex flex-col justify-between transition-colors ${
+                  className={`h-12 p-1.5 border rounded-lg flex flex-col justify-between transition-colors ${
                     isToday 
                       ? 'border-[#A41034] bg-[rgba(164,16,52,0.06)]' 
                       : 'border-border/60 bg-zinc-900/10 hover:border-zinc-700'
                   }`}
                 >
                   <span className={`text-[10px] font-bold ${isToday ? 'text-[#A41034]' : 'text-zinc-500'}`}>{cell.getDate()}</span>
-                  <div className="space-y-0.5 mt-1 overflow-hidden">
+                  <div className="flex gap-0.5 mt-1 overflow-hidden">
                     {dayEvents.map(e => (
-                      <div
-                        key={e.id}
-                        className={`w-full h-1.5 rounded-full ${
-                          e.type === 'CONTEST' ? 'bg-yellow-500' : e.type === 'LECTURE' ? 'bg-[#A41034]' : 'bg-indigo-500'
-                        }`}
-                        title={e.title}
-                      />
+                      <div key={e.id} className="group relative flex-1">
+                        <div
+                          className={`w-full h-1.5 rounded-full ${
+                            e.type === 'CONTEST' ? 'bg-yellow-500' : e.type === 'LECTURE' ? 'bg-[#A41034]' : 'bg-indigo-500'
+                          }`}
+                        />
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block z-30 bg-zinc-950 border border-border px-2 py-1 rounded text-[9px] font-bold text-white whitespace-nowrap shadow-xl">
+                          {e.title}
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -146,50 +155,56 @@ export default function CalendarPage() {
         {/* Schedule Listing Pane */}
         <div className="space-y-4">
           <h2 className="text-sm font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-1.5">
-            <CalendarIcon size={14} className="text-[#A41034]" /> Upcoming events
+            <CalendarIcon size={14} className="text-[#A41034]" /> Events in {monthNames[currentDate.getMonth()]}
           </h2>
 
           <div className="space-y-3">
-            {events.map((evt, idx) => {
-              const cfg = EVENT_COLORS[evt.type] || { badge: 'text-zinc-400 bg-zinc-800 border-zinc-700', border: 'border-l-zinc-700' };
-              const start = new Date(evt.startTime);
-              const startFmt = start.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-              const timeFmt = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            {currentMonthEvents.length === 0 ? (
+              <div className="text-center py-10 text-zinc-600 text-xs border border-border/40 rounded-xl bg-zinc-900/10">
+                No events scheduled for this month.
+              </div>
+            ) : (
+              currentMonthEvents.map((evt, idx) => {
+                const cfg = EVENT_COLORS[evt.type] || { badge: 'text-zinc-400 bg-zinc-800 border-zinc-700', border: 'border-l-zinc-700' };
+                const start = new Date(evt.startTime);
+                const startFmt = start.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                const timeFmt = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-              return (
-                <motion.div
-                  key={evt.id}
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  className={`glass rounded-xl border border-border border-l-4 ${cfg.border} p-4 space-y-3 glow-hover`}
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border ${cfg.badge}`}>
-                        {evt.type}
-                      </span>
-                      <span className="text-[10px] font-bold text-[#A41034] flex items-center gap-1 font-mono">
-                        <Clock size={10} /> {startFmt} @ {timeFmt}
-                      </span>
+                return (
+                  <motion.div
+                    key={evt.id}
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.05 }}
+                    className={`glass rounded-xl border border-border border-l-4 ${cfg.border} p-4 space-y-3 glow-hover`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border ${cfg.badge}`}>
+                          {evt.type}
+                        </span>
+                        <span className="text-[10px] font-bold text-[#A41034] flex items-center gap-1 font-mono">
+                          <Clock size={10} /> {startFmt} @ {timeFmt}
+                        </span>
+                      </div>
+                      <h3 className="text-xs font-bold text-zinc-200 line-clamp-1">{evt.title}</h3>
+                      <p className="text-[10px] text-zinc-500 line-clamp-2 mt-1 leading-relaxed">{evt.description}</p>
                     </div>
-                    <h3 className="text-xs font-bold text-zinc-200 line-clamp-1">{evt.title}</h3>
-                    <p className="text-[10px] text-zinc-500 line-clamp-2 mt-1 leading-relaxed">{evt.description}</p>
-                  </div>
 
-                  {evt.meetLink && (
-                    <a
-                      href={evt.meetLink}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#A41034] hover:text-[#C4122F] transition-colors"
-                    >
-                      <LinkIcon size={10} /> Google Meet Link
-                    </a>
-                  )}
-                </motion.div>
-              );
-            })}
+                    {evt.meetLink && (
+                      <a
+                        href={evt.meetLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#A41034] hover:text-[#C4122F] transition-colors"
+                      >
+                        <LinkIcon size={10} /> Google Meet Link
+                      </a>
+                    )}
+                  </motion.div>
+                );
+              })
+            )}
           </div>
         </div>
       </div>

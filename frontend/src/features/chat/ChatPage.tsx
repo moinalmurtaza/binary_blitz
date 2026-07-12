@@ -11,7 +11,7 @@ interface Message {
 }
 
 const CHANNELS = [
-  { id: 'general', name: 'general', desc: 'NWU Comptron general discussion' },
+  { id: 'general', name: 'general', desc: 'Binary Blitz general discussion' },
   { id: 'contests', name: 'contest-chat', desc: 'Live contest discussion & clarifications' },
   { id: 'algorithms', name: 'algorithms-study', desc: 'Discuss DP, Graphs, and Math templates' },
   { id: 'random', name: 'random', desc: 'Casual off-topic chats' },
@@ -22,7 +22,7 @@ export default function ChatPage() {
   const [activeRoom, setActiveRoom] = useState('general');
   const [messages, setMessages] = useState<Record<string, Message[]>>({
     general: [
-      { senderName: 'Dr. John Doe', message: 'Welcome to the NWU PS Chat! Use channels on the left to discuss algorithms.', createdAt: new Date(Date.now() - 3600000).toISOString() },
+      { senderName: 'Admin', message: 'Welcome to the Binary Blitz Chat! Use channels on the left to discuss algorithms.', createdAt: new Date(Date.now() - 3600000).toISOString() },
     ],
     contests: [],
     algorithms: [],
@@ -30,6 +30,7 @@ export default function ChatPage() {
   });
   const [inputValue, setInputValue] = useState('');
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // Initialize Socket.io connection
@@ -43,7 +44,12 @@ export default function ChatPage() {
 
     newSocket.on('connect', () => {
       console.log('Connected to Chat Web Socket');
+      setIsConnected(true);
       newSocket.emit('join_room', activeRoom);
+    });
+
+    newSocket.on('disconnect', () => {
+      setIsConnected(false);
     });
 
     newSocket.on('receive_message', (data: Message & { roomId: string }) => {
@@ -132,24 +138,46 @@ export default function ChatPage() {
       <div className="flex-1 flex flex-col bg-zinc-950/10 justify-between">
         {/* Header */}
         <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-zinc-900/10">
-          <div className="flex items-center gap-2">
-            <Hash size={18} className="text-[#A41034]" />
-            <div>
-              <h2 className="text-sm font-bold text-zinc-200 capitalize">{activeRoom}</h2>
-              <p className="text-[10px] text-zinc-500 mt-0.5">{activeChannelDesc}</p>
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <Hash size={18} className="text-[#A41034] shrink-0" />
+            <div className="flex-1 min-w-0">
+              {/* Dropdown for mobile, static title for desktop */}
+              <div className="sm:hidden">
+                <select
+                  value={activeRoom}
+                  onChange={(e) => setActiveRoom(e.target.value)}
+                  className="bg-[#2A2D32] border border-[#4B4F55] text-xs font-bold text-zinc-200 rounded px-2.5 py-1 outline-none focus:border-[#A41034] capitalize"
+                >
+                  {CHANNELS.map((chan) => (
+                    <option key={chan.id} value={chan.id}>
+                      #{chan.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <h2 className="hidden sm:block text-sm font-bold text-zinc-200 capitalize">{activeRoom}</h2>
+              <p className="text-[10px] text-zinc-500 mt-0.5 truncate">{activeChannelDesc}</p>
             </div>
           </div>
-          <div className="flex items-center gap-4 text-xs text-zinc-500">
+          <div className="flex items-center gap-4 text-xs text-zinc-500 shrink-0">
             <span className="flex items-center gap-1"><Users size={12} /> Active</span>
           </div>
         </div>
+
+        {/* Socket connection state banner */}
+        {!isConnected && (
+          <div className="bg-[#A41034]/15 border-b border-[#A41034]/20 px-6 py-2 flex items-center gap-2 text-[10px] font-bold text-[#A41034] tracking-wider uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#A41034] animate-ping" />
+            Connecting to chat server...
+          </div>
+        )}
 
         {/* Message Logs */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           <div className="flex items-start gap-3 p-4 rounded-xl bg-[rgba(164,16,52,0.08)] border border-[#A41034]/10">
             <Info size={16} className="text-[#A41034] shrink-0 mt-0.5" />
             <div className="text-[11px] text-zinc-400 leading-relaxed">
-              <span className="font-semibold text-zinc-300">Welcome to NWU CP Community Chat!</span> Discuss algorithm patterns, share contest links, or ask help on editorials. Keep discussions productive and respectful.
+              <span className="font-semibold text-zinc-300">Welcome to Binary Blitz Community Chat!</span> Discuss algorithm patterns, share contest links, or ask help on editorials. Keep discussions productive and respectful.
             </div>
           </div>
 
@@ -164,11 +192,11 @@ export default function ChatPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
               >
-                <div className="flex items-center gap-2 mb-1">
+                <div className={`flex items-center gap-2 mb-1 ${isMe ? 'flex-row-reverse' : ''}`}>
                   <span className="text-[10px] font-bold text-zinc-500">{msg.senderName}</span>
                   <span className="text-[8px] text-zinc-600">{time}</span>
                 </div>
-                <div className={`px-4 py-2.5 rounded-2xl text-xs max-w-md ${
+                <div className={`px-4 py-2.5 rounded-2xl text-xs max-w-md break-all ${
                   isMe 
                     ? 'bg-[#7A0C24] text-white rounded-tr-none' 
                     : 'bg-zinc-800 text-zinc-200 rounded-tl-none border border-border'

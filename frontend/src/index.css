@@ -245,5 +245,6 @@
 
 /* ── Snappy, highly responsive transitions for UI elements ── */
 a, button, input, select, textarea, .harvard-card, .btn-crimson, .btn-outline-crimson, [role="button"] {
-  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+

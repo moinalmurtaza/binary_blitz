@@ -53,7 +53,7 @@ export default function RegisterPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#A41034] to-[#C4122F] mb-4 shadow-lg shadow-[rgba(164,16,52,0.20)]">
             <Code2 size={28} className="text-white" />
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100">Join Comptron</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100">Join Binary Blitz</h1>
           <p className="mt-2 text-sm text-zinc-500">Start your competitive programming journey</p>
         </div>
 
@@ -86,7 +86,7 @@ export default function RegisterPage() {
 
             {[
               { label: 'Full Name', name: 'name', type: 'text', placeholder: 'Your full name' },
-              { label: 'Email Address', name: 'email', type: 'email', placeholder: 'you@nwu.edu.bd' },
+              { label: 'Email Address', name: 'email', type: 'email', placeholder: 'you@binaryblitz.dev' },
               { label: 'Codeforces Handle', name: 'handleCodeforces', type: 'text', placeholder: 'your_cf_handle (optional)' },
               { label: 'GitHub Username', name: 'handleGithub', type: 'text', placeholder: 'your-github (optional)' },
             ].map(({ label, name, type, placeholder }) => (

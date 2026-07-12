@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Sun, 
   Moon, 
@@ -26,18 +26,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
   
   // Interactive UI states
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([
-    { id: 'n-1', title: 'Contest Starting Soon', desc: 'Comptron Weekly Training Contest #1 is live now.', time: '5m ago', read: false },
+    { id: 'n-1', title: 'Contest Starting Soon', desc: 'Binary Blitz Weekly Training Contest #1 is live now.', time: '5m ago', read: false },
     { id: 'n-2', title: 'New Resource Uploaded', desc: 'Dr. John Doe uploaded "Introduction to Dynamic Programming".', time: '2h ago', read: false },
     { id: 'n-3', title: 'Mentorship Request Update', desc: 'Alumni Jane Smith accepted your mentorship connection.', time: '1d ago', read: true }
   ]);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     // Load theme
@@ -84,6 +86,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     setToastMessage(`${featureTitle} section is coming soon!`);
   };
 
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail || !newsletterEmail.includes('@')) {
+      setToastMessage('Please enter a valid email address.');
+      return;
+    }
+    setToastMessage('Successfully subscribed to newsletter!');
+    setNewsletterEmail('');
+  };
+
   useEffect(() => {
     if (toastMessage) {
       const timer = setTimeout(() => setToastMessage(null), 3000);
@@ -101,7 +113,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const mockSearchDb = [
     { type: 'Problem', name: 'A+B Problem', path: '/problems' },
     { type: 'Problem', name: 'Shortest Path (Dijkstra)', path: '/problems' },
-    { type: 'Contest', name: 'Comptron Weekly Training Contest #1', path: '/contests' },
+    { type: 'Contest', name: 'Binary Blitz Weekly Training Contest #1', path: '/contests' },
     { type: 'Resource', name: 'Competitive Programmer\'s Handbook', path: '/learning' },
     { type: 'Trainer', name: 'Dr. John Doe', path: '/community' },
   ];
@@ -185,10 +197,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           {/* Breadcrumb-style header — Harvard editorial */}
           <div className="hidden md:flex items-center gap-1.5 text-[11px] font-sans">
-            <span className="text-[#9A9A9A] uppercase tracking-widest font-semibold text-[9px]">NWU PS</span>
+            <span className="text-[#9A9A9A] uppercase tracking-widest font-semibold text-[9px]">Binary Blitz</span>
             <span className="text-[#4B4F55] mx-1">/</span>
             <span className="text-[#F2F2F2] font-semibold capitalize tracking-wide">
-              {window.location.pathname.split('/')[1] || 'Dashboard'}
+              {location.pathname.split('/')[1] || 'Dashboard'}
             </span>
           </div>
           </div>
@@ -230,23 +242,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             {/* Band 1: Harvard Crimson newsletter strip */}
             <div className="bg-[#A41034] px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
               <span className="font-serif text-base italic text-white tracking-wide">Stay in the know</span>
-              <div className="flex">
+              <form onSubmit={handleNewsletterSubmit} className="flex">
                 <input
                   type="email"
                   placeholder="Email address"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
                   className="px-4 py-2 text-xs text-black bg-white border-0 outline-none w-52 font-sans"
+                  required
                 />
-                <button className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-white border border-white hover:bg-white hover:text-[#A41034] transition-all font-sans">
+                <button type="submit" className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-white border border-white hover:bg-white hover:text-[#A41034] transition-all font-sans">
                   Sign Up →
                 </button>
-              </div>
+              </form>
             </div>
 
             {/* Band 2: Black links */}
             <div className="bg-[#0a0a0a] px-8 py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
               {/* Brand */}
               <div>
-                <p className="font-serif text-white text-lg font-semibold tracking-tight">NWU PS</p>
+                <p className="font-serif text-white text-lg font-semibold tracking-tight">Binary Blitz</p>
                 <p className="text-[8.5px] text-[#9A9A9A] font-sans font-normal mt-1 uppercase tracking-[0.14em]">Competitive Programming</p>
                 <div className="flex items-center gap-2 mt-3 text-[#5a5a5a]">
                   {/* social dots */}
@@ -259,7 +274,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               {[
                 { title: 'Platform', links: ['Dashboard', 'Problems', 'Contests', 'Leaderboard'] },
                 { title: 'Learning', links: ['Learning Hub', 'Schedule', 'Community', 'Calendar'] },
-                { title: 'Info', links: ['About NWU PS', 'OpenCourseWare', 'Contact', 'Privacy'] },
+                { title: 'Info', links: ['About Binary Blitz', 'OpenCourseWare', 'Contact', 'Privacy'] },
               ].map(col => (
                 <div key={col.title}>
                   <h6 className="text-white text-[9px] font-bold uppercase tracking-[0.14em] mb-3 font-sans">{col.title}</h6>
@@ -272,7 +287,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             {/* Band 3: Copyright strip */}
             <div className="bg-[#0a0a0a] border-t border-[#1e1e1e] px-8 py-3 flex items-center justify-between">
-              <span className="text-[9px] text-[#4a4a4a] font-sans">© 2026 NWU CP Academy</span>
+              <span className="text-[9px] text-[#4a4a4a] font-sans">© 2026 Binary Blitz</span>
               <div className="flex gap-6">
                 {['Accessibility', 'Privacy', 'Sitemap'].map(l => (
                   <span key={l} className="text-[9px] text-[#4a4a4a] font-sans hover:text-white transition-colors cursor-pointer">{l}</span>
@@ -296,7 +311,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="fixed md:absolute left-4 md:left-[72px] right-4 md:right-auto top-20 md:top-36 w-auto md:w-80 glass rounded-xl border border-border shadow-2xl p-4 z-50 space-y-3"
+              className="fixed left-4 md:left-[72px] right-4 md:right-auto top-20 md:top-[190px] w-auto md:w-80 glass rounded-xl border border-border shadow-2xl p-4 z-50 space-y-3"
             >
               <div className="flex items-center justify-between border-b border-border/60 pb-2">
                 <h4 className="text-xs font-bold text-zinc-300">Notifications</h4>

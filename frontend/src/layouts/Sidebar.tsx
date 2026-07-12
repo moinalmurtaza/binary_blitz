@@ -19,6 +19,8 @@ import {
   ChevronRight,
   Settings,
   LogOut,
+  Users,
+  Award,
 } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 
@@ -105,7 +107,7 @@ export default function Sidebar({
         <div className="p-5 border-b border-sidebar-border flex flex-col justify-between gap-4 select-none">
           <div className="flex items-start justify-between">
             <div className="flex flex-col min-w-0">
-              <span className="font-serif font-semibold text-[21px] text-white tracking-tight leading-tight">NWU PS Portal</span>
+              <span className="font-serif font-semibold text-[21px] text-white tracking-tight leading-tight">Binary Blitz</span>
               <span className="text-[9px] text-sidebar-muted font-sans font-semibold mt-1.5 uppercase tracking-[0.12em]">Competitive Programming</span>
             </div>
             <button onClick={() => setIsCollapsed(true)} className="hidden md:flex w-6 h-6 rounded items-center justify-center hover:bg-sidebar-hover text-sidebar-muted hover:text-white transition-colors" title="Hide Sidebar">
@@ -118,8 +120,8 @@ export default function Sidebar({
               <span>OpenCourseWare</span>
             </div>
             <div className="flex flex-col mt-2 pt-1 border-t border-sidebar-border/30 text-[10px]">
-              <span className="font-semibold text-zinc-400">David J. Malan (Lead)</span>
-              <a href="mailto:malan@harvard.edu" className="hover:underline text-sidebar-accent/80 hover:text-sidebar-accent flex items-center gap-1 mt-0.5"><Mail size={9} /> malan@harvard.edu</a>
+              <span className="font-semibold text-zinc-400">{user?.name || 'David J. Malan'} ({user?.role || 'Lead'})</span>
+              <a href={`mailto:${user?.email || 'malan@harvard.edu'}`} className="hover:underline text-sidebar-accent/80 hover:text-sidebar-accent flex items-center gap-1 mt-0.5"><Mail size={9} /> {user?.email || 'malan@harvard.edu'}</a>
             </div>
           </div>
         </div>
@@ -140,9 +142,9 @@ export default function Sidebar({
                 { title: 'Schedule Tracker', icon: Map, href: '/schedule' },
                 { title: 'Problem Sets', icon: Code2, href: '/problems' },
                 { title: 'Contests', icon: Trophy, href: '/contests' },
-                { title: 'Leaderboard', icon: Trophy, href: '/leaderboard' },
+                { title: 'Leaderboard', icon: Award, href: '/leaderboard' },
                 { title: 'Learning Hub', icon: BookOpen, href: '/learning' },
-                { title: 'Club Directory', icon: MessageSquare, href: '/community' },
+                { title: 'Club Directory', icon: Users, href: '/community' },
               ].map((item) => {
                 const active = location.pathname === item.href;
                 return (
@@ -239,7 +241,7 @@ export default function Sidebar({
         {/* Footer */}
         <div className="px-4 py-3 border-t border-[#1a1c1f] select-none bg-sidebar-activityBg shrink-0">
           <div className="flex items-center justify-between">
-            <span className="text-[8.5px] font-sans font-bold uppercase tracking-[0.12em] text-[#A41034]/70">NWU CP Academy</span>
+            <span className="text-[8.5px] font-sans font-bold uppercase tracking-[0.12em] text-[#A41034]/70">Binary Blitz</span>
             <span className="text-[8.5px] font-sans text-[#4a4c50]">© 2026</span>
           </div>
         </div>

@@ -117,15 +117,26 @@ export default function DashboardPage() {
   const topUsers = leaderboardData?.leaderboard || [];
   const progress = progressData || null;
 
-  // Mock Performance Data for Recharts
-  const ratingHistoryData = [
-    { name: 'Jan', rating: 1200 },
-    { name: 'Feb', rating: 1250 },
-    { name: 'Mar', rating: 1380 },
-    { name: 'Apr', rating: 1350 },
-    { name: 'May', rating: 1480 },
-    { name: 'Jun', rating: user?.rating || 1540 },
-  ];
+  // Mock Performance Data for Recharts relative to today's date
+  const getRatingHistoryData = () => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const today = new Date();
+    const data = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      const name = months[d.getMonth()];
+      let ratingVal = 1200;
+      if (i === 5) ratingVal = 1200;
+      else if (i === 4) ratingVal = 1250;
+      else if (i === 3) ratingVal = 1380;
+      else if (i === 2) ratingVal = 1350;
+      else if (i === 1) ratingVal = 1480;
+      else ratingVal = user?.rating || 1540;
+      data.push({ name, rating: ratingVal });
+    }
+    return data;
+  };
+  const ratingHistoryData = getRatingHistoryData();
 
   const topicStrengthsData = [
     { topic: 'Math', solved: 24 },
@@ -139,11 +150,17 @@ export default function DashboardPage() {
   // Render a mock activity calendar heatmap block (53 weeks * 7 days)
   const renderHeatmap = () => {
     const days = Array.from({ length: 364 }, (_, i) => {
-      // randomly assign submission density: 0, 1, 2, 3
+      // Deterministic pseudo-random generation to look like streaks and sparse days
+      const val = Math.abs(Math.sin(i * 12.9898 + 78.233) * 43758.5453) % 1;
+      const cluster = Math.sin(i / 15) * Math.cos(i / 7);
       let intensity = 0;
-      if (i % 7 === 0 || i % 13 === 0) intensity = 1;
-      if (i % 15 === 0) intensity = 2;
-      if (i % 29 === 0) intensity = 3;
+      if (cluster > 0.3) {
+        intensity = val > 0.8 ? 3 : val > 0.5 ? 2 : val > 0.2 ? 1 : 0;
+      } else if (cluster > -0.2) {
+        intensity = val > 0.9 ? 2 : val > 0.7 ? 1 : 0;
+      } else {
+        intensity = val > 0.95 ? 1 : 0;
+      }
       return intensity;
     });
 
@@ -216,7 +233,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Schedule Progress Widget */}
-      {progress && (
+      {progress ? (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -259,6 +276,32 @@ export default function DashboardPage() {
                 ))}
               </div>
             </div>
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-[#33363B] rounded border border-[#4B4F55] border-l-2 border-l-zinc-500 p-5 hover:border-[#A41034]/40 transition-all cursor-pointer group"
+          onClick={() => navigate('/schedule')}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-[9px] font-bold text-[#9A9A9A] uppercase tracking-[0.14em] flex items-center gap-2">
+              <Map size={13} className="text-zinc-500" /> CP Roadmap Progress
+            </h3>
+            <div className="flex items-center gap-1 text-xs text-[#A41034] font-semibold group-hover:text-[#C4122F]">
+              View Tracker <ChevronRight size={12} />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-zinc-100">Track Your Daily Coding Roadmap</p>
+              <p className="text-xs text-zinc-500 mt-1">Keep track of your training, solve problem sets, and prepare for contests.</p>
+            </div>
+            <button className="btn-crimson shrink-0 self-start md:self-auto text-xs py-1.5 px-4 rounded">
+              Start Training
+            </button>
           </div>
         </motion.div>
       )}

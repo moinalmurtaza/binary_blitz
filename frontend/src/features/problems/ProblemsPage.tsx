@@ -387,7 +387,7 @@ export default function ProblemsPage() {
       
       {/* Header & Overall Progress */}
       <div className="mb-12">
-        <h1 className="font-serif text-4xl md:text-5xl font-medium tracking-tight mb-4">DSA Training Sheet</h1>
+        <h1 className="font-serif text-4xl md:text-5xl font-medium tracking-tight mb-4">Problem Sets — DSA Sheet</h1>
         <p className="text-[#C8C8C8] text-lg font-serif mb-8 max-w-3xl leading-relaxed">
           A comprehensive, curated list of algorithmic problems designed to systematically build your problem-solving skills, inspired by top university curriculums and industry standards.
         </p>
@@ -412,6 +412,32 @@ export default function ProblemsPage() {
         </div>
       </div>
 
+      {/* Jump to Day Quick Filter */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 bg-[#33363B]/40 p-4 rounded-xl border border-border">
+        <label htmlFor="jump-to-day-select" className="text-xs font-bold text-[#9A9A9A] uppercase tracking-widest">Jump to Topic:</label>
+        <select
+          id="jump-to-day-select"
+          onChange={(e) => {
+            const topic = e.target.value;
+            if (topic) {
+              setExpandedTopics(prev => ({ ...prev, [topic]: true }));
+              const element = document.getElementById(topic);
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }
+          }}
+          className="bg-[#2A2D32] border border-[#4B4F55] text-xs text-zinc-200 rounded px-3 py-1.5 outline-none focus:border-[#A41034] transition-all min-w-[200px]"
+        >
+          <option value="">Select a Day...</option>
+          {SHEET_DATA.map((group) => (
+            <option key={group.topic} value={group.topic}>
+              {group.topic.split(':')[0]} — {group.topic.split(':')[1]?.trim() || ''}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Topics Accordion List */}
       <div className="space-y-4">
         {SHEET_DATA.map((group) => {
@@ -420,7 +446,7 @@ export default function ProblemsPage() {
           const isExpanded = expandedTopics[group.topic];
 
           return (
-            <div key={group.topic} className="harvard-card bg-[#33363B] border border-[#4B4F55] overflow-hidden">
+            <div key={group.topic} id={group.topic} className="scroll-mt-24 harvard-card bg-[#33363B] border border-[#4B4F55] overflow-hidden">
               {/* Topic Header */}
               <button 
                 onClick={() => toggleTopic(group.topic)}
@@ -475,13 +501,13 @@ export default function ProblemsPage() {
                               <td className="px-6 py-4">
                                 <button
                                   onClick={() => toggleProblem(problem.id)}
-                                  className={`w-5 h-5 rounded-sm border flex items-center justify-center transition-colors ${
+                                  className={`w-6 h-6 rounded-md border flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-[#A41034]/50 ${
                                     isSolved 
                                       ? 'bg-[#A41034] border-[#A41034] text-white' 
                                       : 'border-[#6B6B6B] hover:border-[#A41034]'
                                   }`}
                                 >
-                                  {isSolved && <Check size={14} strokeWidth={3} />}
+                                  {isSolved && <Check size={16} strokeWidth={3.5} />}
                                 </button>
                               </td>
                               <td className="px-6 py-4">
@@ -521,6 +547,23 @@ export default function ProblemsPage() {
           );
         })}
       </div>
+
+      {/* Reset Progress Button */}
+      {totalSolved > 0 && (
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={() => {
+              if (window.confirm('Are you sure you want to reset all your progress?')) {
+                setSolved({});
+                localStorage.removeItem('dsa-sheet-progress');
+              }
+            }}
+            className="text-xs font-semibold text-zinc-500 hover:text-red-400 border border-zinc-700 hover:border-red-500/30 px-4 py-2 rounded-lg transition-all"
+          >
+            Reset Progress
+          </button>
+        </div>
+      )}
 
     </div>
   );

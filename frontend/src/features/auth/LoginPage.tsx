@@ -55,7 +55,7 @@ export default function LoginPage() {
             <Code2 size={28} className="text-white" />
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100">Welcome back</h1>
-          <p className="mt-2 text-sm text-zinc-500">Sign in to Comptron CP Hub</p>
+          <p className="mt-2 text-sm text-zinc-500">Sign in to Binary Blitz</p>
         </div>
 
         {/* Card */}
@@ -78,7 +78,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@nwu.edu.bd"
+                placeholder="you@binaryblitz.dev"
                 required
                 className="w-full px-4 py-3 rounded-lg bg-[#33363B]/60 border border-border text-zinc-100 placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-rose-600/40 focus:border-[#A41034]/60 transition-all"
               />
@@ -122,9 +122,9 @@ export default function LoginPage() {
             <p className="text-[11px] text-zinc-500 mb-2 font-semibold uppercase tracking-wider">Demo Accounts — Click to autofill</p>
             <div className="space-y-1.5">
               {[
-                { label: '🔴 Admin', email: 'admin@nwu.edu.bd', pass: 'password123' },
-                { label: '🟡 Trainer', email: 'trainer@nwu.edu.bd', pass: 'password123' },
-                { label: '🟢 Student', email: 'student1@nwu.edu.bd', pass: 'password123' },
+                { label: '🔴 Admin', email: 'admin@binaryblitz.dev', pass: 'password123' },
+                { label: '🟡 Trainer', email: 'trainer@binaryblitz.dev', pass: 'password123' },
+                { label: '🟢 Student', email: 'student1@binaryblitz.dev', pass: 'password123' },
               ].map(({ label, email: de, pass }) => (
                 <button
                   key={de}
