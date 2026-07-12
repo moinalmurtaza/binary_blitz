@@ -48,7 +48,7 @@ function AcknowledgementCard({
       <div className={`relative w-full ${isHorizontal ? 'md:w-[40%] md:aspect-auto' : 'aspect-[16/10]'} overflow-hidden bg-zinc-900`}>
         <img
           src={bgImage}
-          alt={`Visual context for ${name}`}
+          alt={`Photo of ${name}`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
         {/* Floating rounded avatar */}
@@ -146,7 +146,7 @@ const GROUP_1 = {
   members: [
     {
       name: 'Asif Al Fattah',
-      bgImage: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop',
+      bgImage: '/people/asif_al_fattah.jpg',
       description: (
         <>
           Dedicated with gratitude to <strong className="text-white">Asif Al Fattah</strong>, whose initiative,{' '}
@@ -165,19 +165,19 @@ const GROUP_2 = {
   members: [
     {
       name: 'Howlader Mehedi Hasan',
-      bgImage: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop',
+      bgImage: '/people/howlader_mehedi_hasan.jpg',
       description:
         'With sincere appreciation for the encouragement, guidance, and valuable contributions throughout the journey of Binary Blitz.',
     },
     {
       name: 'Sk Shiam Rahan',
-      bgImage: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=800&auto=format&fit=crop',
+      bgImage: '/people/sk_shiam_rahan.jpg',
       description:
         'With sincere appreciation for the encouragement, guidance, and valuable contributions throughout the journey of Binary Blitz.',
     },
     {
       name: 'Mamun Parvez',
-      bgImage: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=800&auto=format&fit=crop',
+      bgImage: '/people/mamun_parvez.jpg',
       description:
         'With sincere appreciation for the encouragement, guidance, and valuable contributions throughout the journey of Binary Blitz.',
     },
@@ -191,12 +191,12 @@ const GROUP_3 = {
   members: [
     {
       name: 'Shimul Mandal',
-      bgImage: 'https://images.unsplash.com/photo-1605379399642-870262d3d051?q=80&w=800&auto=format&fit=crop',
+      bgImage: '/people/shimul_mandal.jpg',
       description: 'Special thanks for the technical support and assistance in bringing Binary Blitz to life.',
     },
     {
       name: 'Asif Foysal',
-      bgImage: 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?q=80&w=800&auto=format&fit=crop',
+      bgImage: '/people/asif_foysal.jpg',
       description: 'Special thanks for the technical support and assistance in bringing Binary Blitz to life.',
     },
   ],
