@@ -102,7 +102,7 @@ function AcknowledgementCard({
         {/* ── Top / Left image ── */}
         <div
           className={`relative w-full ${
-            isHorizontal ? 'md:w-[40%] md:aspect-auto' : 'aspect-[16/10]'
+            isHorizontal ? 'md:w-[50%] md:aspect-auto' : 'aspect-[16/10]'
           } overflow-hidden bg-zinc-900`}
         >
           {/* Parallax wrapper — moves opposite to tilt */}
