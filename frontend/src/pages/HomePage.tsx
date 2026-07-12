@@ -18,6 +18,7 @@ interface AcknowledgementCardProps {
   whatsappUrl?: string;
   avatarSeed?: string;
   bgImage: string;
+  variant?: 'horizontal' | 'vertical';
   delay?: number;
 }
 
@@ -28,9 +29,12 @@ function AcknowledgementCard({
   whatsappUrl = '#',
   avatarSeed,
   bgImage,
+  variant = 'vertical',
   delay = 0,
 }: AcknowledgementCardProps) {
   const seed = avatarSeed || name.replace(/\s/g, '');
+  const isHorizontal = variant === 'horizontal';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -38,10 +42,10 @@ function AcknowledgementCard({
       viewport={{ once: true }}
       transition={{ duration: 0.55, delay }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-[#1E222B] shadow-2xl hover:border-[#A41034]/50 transition-all duration-300 h-full"
+      className={`group flex flex-col ${isHorizontal ? 'md:flex-row' : ''} overflow-hidden rounded-xl border border-white/10 bg-[#1E222B] shadow-2xl hover:border-[#A41034]/50 transition-all duration-300 h-full`}
     >
-      {/* Top Image Portion */}
-      <div className="relative w-full aspect-[16/10] overflow-hidden bg-zinc-900">
+      {/* Top/Left Image Portion */}
+      <div className={`relative w-full ${isHorizontal ? 'md:w-[40%] md:aspect-auto' : 'aspect-[16/10]'} overflow-hidden bg-zinc-900`}>
         <img
           src={bgImage}
           alt={`Visual context for ${name}`}
@@ -57,7 +61,7 @@ function AcknowledgementCard({
         </div>
       </div>
 
-      {/* Bottom Crimson Text Container */}
+      {/* Bottom/Right Crimson Text Container */}
       <div className="bg-[#4A1025] p-6 flex flex-col justify-between flex-1 relative min-h-[220px]">
         <div>
           <h3 className="font-serif text-2xl font-bold text-white mb-3 tracking-tight leading-tight">
@@ -109,6 +113,8 @@ interface GroupProps {
 }
 
 function AcknowledgementGroup({ groupLabel, groupSubtitle, accentColor, members, baseDelay = 0 }: GroupProps) {
+  const isSingle = members.length === 1;
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
@@ -118,9 +124,14 @@ function AcknowledgementGroup({ groupLabel, groupSubtitle, accentColor, members,
           <h3 className="text-sm font-bold text-zinc-200">{groupLabel}</h3>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-2">
+      <div className={isSingle ? "grid grid-cols-1 gap-8 pt-2" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-2"}>
         {members.map((m, i) => (
-          <AcknowledgementCard key={m.name} {...m} delay={baseDelay + i * 0.08} />
+          <AcknowledgementCard 
+            key={m.name} 
+            {...m} 
+            variant={isSingle ? 'horizontal' : 'vertical'}
+            delay={baseDelay + i * 0.08} 
+          />
         ))}
       </div>
     </div>
