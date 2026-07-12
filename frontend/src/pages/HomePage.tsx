@@ -324,42 +324,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── With Gratitude Section ── */}
-      <section className="py-24 px-6 bg-[#0D0F14] relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 0%, rgba(164,16,52,0.07) 0%, transparent 70%)' }} />
-
-        <div className="max-w-4xl mx-auto relative z-10">
-          {/* Section header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 mb-4">
-              <div className="w-8 h-[2px] bg-gradient-to-r from-transparent to-[#A41034]" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#A41034]">Acknowledgements</span>
-              <div className="w-8 h-[2px] bg-gradient-to-l from-transparent to-[#A41034]" />
-            </div>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-white mb-4">
-              With Gratitude
-            </h2>
-            <p className="text-zinc-500 text-lg max-w-xl mx-auto leading-relaxed">
-              Binary Blitz stands on the shoulders of those who inspired, guided, and supported this journey.
-            </p>
-          </motion.div>
-
-          {/* Groups */}
-          <div className="space-y-14">
-            <AcknowledgementGroup {...GROUP_1} baseDelay={0} />
-            <AcknowledgementGroup {...GROUP_2} baseDelay={0.05} />
-            <AcknowledgementGroup {...GROUP_3} baseDelay={0.05} />
-          </div>
-        </div>
-      </section>
 
       {/* ── In Focus Section ── */}
       <section className="py-24 px-6 bg-[#FAF7F2] text-[#1A1A1A]">
@@ -482,6 +446,43 @@ export default function HomePage() {
             >
               Create Free Account <ArrowRight size={18} className="ml-2" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── With Gratitude Section ── */}
+      <section className="py-24 px-6 bg-[#0D0F14] relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 0%, rgba(164,16,52,0.07) 0%, transparent 70%)' }} />
+
+        <div className="max-w-4xl mx-auto relative z-10">
+          {/* Section header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 mb-4">
+              <div className="w-8 h-[2px] bg-gradient-to-r from-transparent to-[#A41034]" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#A41034]">Acknowledgements</span>
+              <div className="w-8 h-[2px] bg-gradient-to-l from-transparent to-[#A41034]" />
+            </div>
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-white mb-4">
+              With Gratitude
+            </h2>
+            <p className="text-zinc-500 text-lg max-w-xl mx-auto leading-relaxed">
+              Binary Blitz stands on the shoulders of those who inspired, guided, and supported this journey.
+            </p>
+          </motion.div>
+
+          {/* Groups */}
+          <div className="space-y-14">
+            <AcknowledgementGroup {...GROUP_1} baseDelay={0} />
+            <AcknowledgementGroup {...GROUP_2} baseDelay={0.05} />
+            <AcknowledgementGroup {...GROUP_3} baseDelay={0.05} />
           </div>
         </div>
       </section>
