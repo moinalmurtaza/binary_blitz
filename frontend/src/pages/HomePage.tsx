@@ -242,32 +242,17 @@ export default function HomePage() {
 
         <div className="max-w-7xl mx-auto relative z-10 w-full">
           <div className="max-w-3xl">
-            {/* Eyebrow */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="inline-flex items-center gap-3 mb-8 px-4 py-2 rounded-full border border-[#A41034]/30 bg-[#A41034]/10">
-                <Zap size={12} className="text-[#A41034]" />
-                <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#A41034]">
-                  Competitive Programming Platform
-                </span>
-              </div>
-            </motion.div>
+
 
             {/* Main heading */}
             <motion.h1
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] mb-6 text-white"
+              className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] mb-6"
             >
-              Welcome to{' '}
-              <span className="relative">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A41034] via-[#C4122F] to-[#E03050]">
-                  Binary Blitz
-                </span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A41034] via-[#C4122F] to-[#E03050]">
+                Binary Blitz
               </span>
             </motion.h1>
 
