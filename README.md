@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/NWU-CP%20Academy-A41034?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgN2wxMCA1IDEwLTVMMTIgMnpNMiAxN2wxMCA1IDEwLTVNMiAxMmwxMCA1IDEwLTUiLz48L3N2Zz4=" alt="NWU CP Academy" />
+<img src="https://img.shields.io/badge/Binary-Blitz-A41034?style=for-the-badge" alt="Binary Blitz" />
 
-# NWU PS Portal — Comptron Club CP Platform
+# Binary Blitz — Competitive Programming Platform
 
-**A production-grade Competitive Programming training platform for North Western University, Khulna**
+**A production-grade Competitive Programming training platform**
 
-[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-GitHub%20Pages-A41034?style=for-the-badge)](https://moinalmurtaza-del.github.io/PS/)
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-GitHub%20Pages-A41034?style=for-the-badge)](https://moinalmurtaza.github.io/binary_blitz/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-5.3-646CFF?style=flat-square&logo=vite)](https://vitejs.dev)
@@ -48,7 +48,7 @@
 
 ## 🚀 Live Demo
 
-> **Frontend (GitHub Pages):** [https://moinalmurtaza-del.github.io/PS/](https://moinalmurtaza-del.github.io/PS/)
+> **Frontend (GitHub Pages):** [https://moinalmurtaza.github.io/binary_blitz/](https://moinalmurtaza.github.io/binary_blitz/)
 
 > ⚠️ The live demo uses a **mock authentication layer** — no backend is required to explore the UI. Click any demo account button on the Login page to log in instantly.
 
@@ -56,15 +56,15 @@
 
 | Role | Email | Password | Access |
 |------|-------|----------|--------|
-| 🔴 **Admin** | `admin@nwu.edu.bd` | `password123` | Full access — Admin Panel + all features |
-| 🟡 **Trainer** | `trainer@nwu.edu.bd` | `password123` | Manage Schedule, view all content |
-| 🟢 **Student** | `student1@nwu.edu.bd` | `password123` | Problem tracking, contests, roadmap |
+| 🔴 **Admin** | `admin@binaryblitz.dev` | `password123` | Full access — Admin Panel + all features |
+| 🟡 **Trainer** | `trainer@binaryblitz.dev` | `password123` | Manage Schedule, view all content |
+| 🟢 **Student** | `student1@binaryblitz.dev` | `password123` | Problem tracking, contests, roadmap |
 
 ---
 
 ## 🎯 Overview
 
-**NWU PS Portal** is the official competitive programming training platform for the **Comptron Club** at North Western University, Khulna. It provides an end-to-end ecosystem for algorithmic training, contest management, and academic progress tracking — inspired by the pedagogical approach of Harvard's CS50 and modeled after Codeforces contest systems.
+**Binary Blitz** is a competitive programming training platform. It provides an end-to-end ecosystem for algorithmic training, contest management, and academic progress tracking — inspired by the pedagogical approach of Harvard's CS50 and modeled after Codeforces contest systems.
 
 The platform supports **3 user roles** (Admin, Trainer, Student), a **17-week structured curriculum**, ICPC-style rated contests, a real-time chat system, and an interactive learning hub.
 
@@ -260,7 +260,7 @@ StudentProgress  — Per-user day completion tracking
 
 ## 📸 Screenshots
 
-> Visit the [Live Demo](https://moinalmurtaza-del.github.io/PS/) to see the full interactive experience.
+> Visit the [Live Demo](https://moinalmurtaza.github.io/binary_blitz/) to see the full interactive experience.
 
 | Page | Description |
 |---|---|
@@ -290,8 +290,8 @@ StudentProgress  — Per-user day completion tracking
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/moinalmurtaza-del/PS.git
-cd PS
+git clone https://github.com/moinalmurtaza/binary_blitz.git
+cd binary_blitz
 ```
 
 ### 2. Start Infrastructure (Docker)
@@ -409,10 +409,10 @@ These accounts are seeded into the database by `npm run prisma:seed`:
 
 | Role | Email | Password | Capabilities |
 |------|-------|----------|--------------|
-| 🔴 **Admin** | `admin@nwu.edu.bd` | `password123` | All features + Admin Panel |
-| 🟡 **Trainer** | `trainer@nwu.edu.bd` | `password123` | Manage Schedule, upload resources |
-| 🟢 **Student (ICPC)** | `student1@nwu.edu.bd` | `password123` | Standard student access |
-| 🟢 **Student (Beginner)** | `student2@nwu.edu.bd` | `password123` | Standard student access |
+| 🔴 **Admin** | `admin@binaryblitz.dev` | `password123` | All features + Admin Panel |
+| 🟡 **Trainer** | `trainer@binaryblitz.dev` | `password123` | Manage Schedule, upload resources |
+| 🟢 **Student (ICPC)** | `student1@binaryblitz.dev` | `password123` | Standard student access |
+| 🟢 **Student (Beginner)** | `student2@binaryblitz.dev` | `password123` | Standard student access |
 
 > The frontend's **Login page has one-click demo account buttons** to auto-fill credentials.
 
@@ -578,8 +578,8 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <div align="center">
 
-**Built with ❤️ for the Comptron Club — North Western University, Khulna, Bangladesh**
+**Built with ❤️ for Binary Blitz**
 
-[![GitHub](https://img.shields.io/badge/GitHub-moinalmurtaza--del-181717?style=flat-square&logo=github)](https://github.com/moinalmurtaza-del/PS)
+[![GitHub](https://img.shields.io/badge/GitHub-moinalmurtaza-181717?style=flat-square&logo=github)](https://github.com/moinalmurtaza/binary_blitz)
 
 </div>
