@@ -17,6 +17,7 @@ interface AcknowledgementCardProps {
   facebookUrl?: string;
   whatsappUrl?: string;
   avatarSeed?: string;
+  bgImage: string;
   delay?: number;
 }
 
@@ -26,6 +27,7 @@ function AcknowledgementCard({
   facebookUrl = '#',
   whatsappUrl = '#',
   avatarSeed,
+  bgImage,
   delay = 0,
 }: AcknowledgementCardProps) {
   const seed = avatarSeed || name.replace(/\s/g, '');
@@ -36,16 +38,17 @@ function AcknowledgementCard({
       viewport={{ once: true }}
       transition={{ duration: 0.55, delay }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className="relative group flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm hover:border-[#A41034]/40 hover:bg-white/[0.06] transition-all duration-300"
-      style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.25)' }}
+      className="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-[#1E222B] shadow-2xl hover:border-[#A41034]/50 transition-all duration-300 h-full"
     >
-      {/* Gradient border glow on hover */}
-      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-        style={{ background: 'linear-gradient(135deg, rgba(164,16,52,0.06) 0%, transparent 60%)' }} />
-
-      {/* Avatar */}
-      <div className="shrink-0">
-        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#A41034]/30 group-hover:border-[#A41034]/70 transition-colors shadow-lg shadow-black/30">
+      {/* Top Image Portion */}
+      <div className="relative w-full aspect-[16/10] overflow-hidden bg-zinc-900">
+        <img
+          src={bgImage}
+          alt={`Visual context for ${name}`}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+        />
+        {/* Floating rounded avatar */}
+        <div className="absolute top-4 right-4 w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 shadow-lg">
           <img
             src={`https://api.dicebear.com/8.x/initials/svg?seed=${encodeURIComponent(seed)}&backgroundColor=7f1d1d,9f1239,be123c&fontFamily=Georgia&fontSize=40&fontWeight=700`}
             alt={`Profile picture of ${name}`}
@@ -54,19 +57,25 @@ function AcknowledgementCard({
         </div>
       </div>
 
-      {/* Text */}
-      <div className="flex-1 text-center sm:text-left">
-        <h3 className="text-lg font-bold text-white mb-2 tracking-tight">{name}</h3>
-        <p className="text-sm text-zinc-400 leading-relaxed">{description}</p>
+      {/* Bottom Crimson Text Container */}
+      <div className="bg-[#4A1025] p-6 flex flex-col justify-between flex-1 relative min-h-[220px]">
+        <div>
+          <h3 className="font-serif text-2xl font-bold text-white mb-3 tracking-tight leading-tight">
+            {name}
+          </h3>
+          <div className="text-sm text-zinc-200/90 leading-relaxed mb-6 font-sans">
+            {description}
+          </div>
+        </div>
 
-        {/* Social links */}
-        <div className="flex items-center justify-center sm:justify-start gap-3 mt-4">
+        {/* Action/Links Strip */}
+        <div className="flex items-center gap-3 pr-12">
           <a
             href={facebookUrl}
             target="_blank"
             rel="noreferrer"
             aria-label={`${name} on Facebook`}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1877F2]/10 border border-[#1877F2]/25 text-[#1877F2] text-xs font-bold hover:bg-[#1877F2]/20 hover:border-[#1877F2]/50 transition-all"
+            className="flex items-center gap-1 text-white/80 hover:text-white text-xs font-semibold bg-white/10 hover:bg-white/20 border border-white/15 px-2.5 py-1.5 rounded-lg transition-all"
           >
             <Facebook size={12} /> Facebook
           </a>
@@ -75,10 +84,15 @@ function AcknowledgementCard({
             target="_blank"
             rel="noreferrer"
             aria-label={`${name} on WhatsApp`}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#25D366]/10 border border-[#25D366]/25 text-[#25D366] text-xs font-bold hover:bg-[#25D366]/20 hover:border-[#25D366]/50 transition-all"
+            className="flex items-center gap-1 text-white/80 hover:text-white text-xs font-semibold bg-white/10 hover:bg-white/20 border border-white/15 px-2.5 py-1.5 rounded-lg transition-all"
           >
             <MessageCircle size={12} /> WhatsApp
           </a>
+        </div>
+
+        {/* Signature circle button with white arrow */}
+        <div className="absolute bottom-6 right-6 w-10 h-10 rounded-full bg-[#A41034] group-hover:bg-[#C4122F] text-white flex items-center justify-center transition-colors shadow-lg duration-250">
+          <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
         </div>
       </div>
     </motion.div>
@@ -104,7 +118,7 @@ function AcknowledgementGroup({ groupLabel, groupSubtitle, accentColor, members,
           <h3 className="text-sm font-bold text-zinc-200">{groupLabel}</h3>
         </div>
       </div>
-      <div className="space-y-3 pl-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-2">
         {members.map((m, i) => (
           <AcknowledgementCard key={m.name} {...m} delay={baseDelay + i * 0.08} />
         ))}
@@ -121,11 +135,12 @@ const GROUP_1 = {
   members: [
     {
       name: 'Asif Al Fattah',
+      bgImage: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop',
       description: (
         <>
-          Dedicated with gratitude to <strong className="text-zinc-200">Asif Al Fattah</strong>, whose initiative,{' '}
+          Dedicated with gratitude to <strong className="text-white">Asif Al Fattah</strong>, whose initiative,{' '}
           <em>Code Academia</em>, laid the foundation for Competitive Programming at North Western University, Khulna.
-          His pioneering efforts inspired the vision and mission behind <strong className="text-zinc-200">Binary Blitz</strong>.
+          His pioneering efforts inspired the vision and mission behind <strong className="text-white">Binary Blitz</strong>.
         </>
       ),
     },
@@ -139,16 +154,19 @@ const GROUP_2 = {
   members: [
     {
       name: 'Howlader Mehedi Hasan',
+      bgImage: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop',
       description:
         'With sincere appreciation for the encouragement, guidance, and valuable contributions throughout the journey of Binary Blitz.',
     },
     {
       name: 'Sk Shiam Rahan',
+      bgImage: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=800&auto=format&fit=crop',
       description:
         'With sincere appreciation for the encouragement, guidance, and valuable contributions throughout the journey of Binary Blitz.',
     },
     {
       name: 'Mamun Parvez',
+      bgImage: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=800&auto=format&fit=crop',
       description:
         'With sincere appreciation for the encouragement, guidance, and valuable contributions throughout the journey of Binary Blitz.',
     },
@@ -162,10 +180,12 @@ const GROUP_3 = {
   members: [
     {
       name: 'Shimul Mandal',
+      bgImage: 'https://images.unsplash.com/photo-1605379399642-870262d3d051?q=80&w=800&auto=format&fit=crop',
       description: 'Special thanks for the technical support and assistance in bringing Binary Blitz to life.',
     },
     {
       name: 'Asif Foysal',
+      bgImage: 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?q=80&w=800&auto=format&fit=crop',
       description: 'Special thanks for the technical support and assistance in bringing Binary Blitz to life.',
     },
   ],
