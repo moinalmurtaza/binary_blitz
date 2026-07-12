@@ -86,7 +86,7 @@ function AcknowledgementCard({
         onMouseLeave={onMouseLeave}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
         className={`group relative flex flex-col ${
-          isHorizontal ? 'md:flex-row' : ''
+          isHorizontal ? 'md:flex-row max-w-4xl mx-auto w-full md:h-[450px]' : ''
         } overflow-hidden rounded-xl border border-white/10 bg-[#1E222B] shadow-2xl hover:border-[#A41034]/50 transition-colors duration-300 h-full cursor-default`}
       >
         {/* ── Glare layer ── */}
@@ -102,7 +102,7 @@ function AcknowledgementCard({
         {/* ── Top / Left image ── */}
         <div
           className={`relative w-full ${
-            isHorizontal ? 'md:w-[50%] md:aspect-auto' : 'aspect-[16/10]'
+            isHorizontal ? 'md:w-[45%] h-full shrink-0' : 'aspect-[16/10]'
           } overflow-hidden bg-zinc-900`}
         >
           {/* Parallax wrapper — moves opposite to tilt */}
@@ -113,7 +113,8 @@ function AcknowledgementCard({
             <img
               src={bgImage}
               alt={`Photo of ${name}`}
-              className={`w-full h-full object-cover object-${imagePosition}`}
+              className="w-full h-full object-cover"
+              style={{ objectPosition: imagePosition }}
             />
           </motion.div>
 
@@ -236,7 +237,7 @@ const GROUP_1 = {
     {
       name: 'Asif Al Fattah',
       bgImage: `${BASE}people/asif_al_fattah.jpg`,
-      imagePosition: 'top' as const,
+      imagePosition: 'center' as const,
       description: (
         <>
           Dedicated with gratitude to <strong className="text-white">Asif Al Fattah</strong>, whose initiative,{' '}
