@@ -21,6 +21,7 @@ interface AcknowledgementCardProps {
   whatsappUrl?: string;
   avatarSeed?: string;
   bgImage: string;
+  imagePosition?: 'center' | 'top' | 'bottom';
   variant?: 'horizontal' | 'vertical';
   delay?: number;
 }
@@ -32,6 +33,7 @@ function AcknowledgementCard({
   whatsappUrl = '#',
   avatarSeed,
   bgImage,
+  imagePosition = 'center',
   variant = 'vertical',
   delay = 0,
 }: AcknowledgementCardProps) {
@@ -111,7 +113,7 @@ function AcknowledgementCard({
             <img
               src={bgImage}
               alt={`Photo of ${name}`}
-              className="w-full h-full object-cover"
+              className={`w-full h-full object-cover object-${imagePosition}`}
             />
           </motion.div>
 
@@ -234,6 +236,7 @@ const GROUP_1 = {
     {
       name: 'Asif Al Fattah',
       bgImage: `${BASE}people/asif_al_fattah.jpg`,
+      imagePosition: 'top' as const,
       description: (
         <>
           Dedicated with gratitude to <strong className="text-white">Asif Al Fattah</strong>, whose initiative,{' '}
