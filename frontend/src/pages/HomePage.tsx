@@ -3,6 +3,9 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Code2, Trophy, BookOpen, ArrowRight, Shield, ChevronRight, Facebook, MessageCircle, Zap, Heart } from 'lucide-react';
 
+// Vite base URL — resolves to '/binary_blitz/' in both dev and production
+const BASE = import.meta.env.BASE_URL;
+
 const stats = [
   { label: 'Active Members', value: '200+' },
   { label: 'Problems', value: '500+' },
@@ -146,7 +149,7 @@ const GROUP_1 = {
   members: [
     {
       name: 'Asif Al Fattah',
-      bgImage: '/people/asif_al_fattah.jpg',
+      bgImage: `${BASE}people/asif_al_fattah.jpg`,
       description: (
         <>
           Dedicated with gratitude to <strong className="text-white">Asif Al Fattah</strong>, whose initiative,{' '}
@@ -165,19 +168,19 @@ const GROUP_2 = {
   members: [
     {
       name: 'Howlader Mehedi Hasan',
-      bgImage: '/people/howlader_mehedi_hasan.jpg',
+      bgImage: `${BASE}people/howlader_mehedi_hasan.jpg`,
       description:
         'With sincere appreciation for the encouragement, guidance, and valuable contributions throughout the journey of Binary Blitz.',
     },
     {
       name: 'Sk Shiam Rahan',
-      bgImage: '/people/sk_shiam_rahan.jpg',
+      bgImage: `${BASE}people/sk_shiam_rahan.jpg`,
       description:
         'With sincere appreciation for the encouragement, guidance, and valuable contributions throughout the journey of Binary Blitz.',
     },
     {
       name: 'Mamun Parvez',
-      bgImage: '/people/mamun_parvez.jpg',
+      bgImage: `${BASE}people/mamun_parvez.jpg`,
       description:
         'With sincere appreciation for the encouragement, guidance, and valuable contributions throughout the journey of Binary Blitz.',
     },
@@ -191,12 +194,12 @@ const GROUP_3 = {
   members: [
     {
       name: 'Shimul Mandal',
-      bgImage: '/people/shimul_mandal.jpg',
+      bgImage: `${BASE}people/shimul_mandal.jpg`,
       description: 'Special thanks for the technical support and assistance in bringing Binary Blitz to life.',
     },
     {
       name: 'Asif Foysal',
-      bgImage: '/people/asif_foysal.jpg',
+      bgImage: `${BASE}people/asif_foysal.jpg`,
       description: 'Special thanks for the technical support and assistance in bringing Binary Blitz to life.',
     },
   ],
