@@ -202,18 +202,14 @@ export default function HomePage() {
       </nav>
 
       {/* ── Hero Section ── */}
-      <section className="relative pt-32 pb-28 lg:pt-48 lg:pb-40 px-6 overflow-hidden flex items-center min-h-[90vh]">
-        {/* Background */}
+      <section className="relative pt-32 pb-32 lg:pt-48 lg:pb-48 px-6 overflow-hidden flex items-center min-h-[90vh]">
+        {/* Background Image & Overlays */}
         <div
           className="absolute inset-0 z-0 bg-cover bg-center"
-          style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2670&auto=format&fit=crop")' }}
+          style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=2670&auto=format&fit=crop")' }}
         />
-        <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#0D0F14]/97 via-[#0D0F14]/85 to-[#0D0F14]/50" />
-        <div className="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-transparent to-[#26292D]" />
-
-        {/* Animated accent blobs */}
-        <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none z-0"
-          style={{ background: 'radial-gradient(circle, rgba(164,16,52,0.12) 0%, transparent 70%)' }} />
+        <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#1D2440]/95 via-[#1D2440]/80 to-transparent" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-[#26292D]/40 to-[#26292D]" />
 
         <div className="max-w-7xl mx-auto relative z-10 w-full">
           <div className="max-w-3xl">
