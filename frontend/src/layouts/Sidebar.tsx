@@ -60,7 +60,9 @@ export default function Sidebar({
       {/* ── Activity Bar (icon strip) ── */}
       <div className="w-[58px] bg-sidebar-activityBg border-r border-sidebar-border flex flex-col justify-between items-center py-4 shrink-0">
         <div className="flex flex-col items-center gap-6 w-full">
-          <Link to="/dashboard" onClick={onCloseMobile} className="w-10 h-10 rounded-xl bg-sidebar-hover border border-sidebar-border flex items-center justify-center text-white text-lg hover:border-sidebar-accent/50 transition-colors focus-visible:outline-none">⚡</Link>
+          <Link to="/dashboard" onClick={onCloseMobile} className="w-10 h-10 rounded-xl hover:border-sidebar-accent/50 transition-all flex items-center justify-center focus-visible:outline-none">
+            <img src="/binary_blitz/logo.png" alt="Logo" className="w-7 h-7 object-contain" />
+          </Link>
           <div className="w-8 h-px bg-sidebar-border" />
           <div className="flex flex-col items-center gap-4 w-full">
             <button onClick={onToggleSearch} className="w-10 h-10 rounded-lg flex items-center justify-center text-sidebar-muted hover:text-white hover:bg-sidebar-hover transition-all group relative focus:outline-none" title="Global Search (Ctrl+K)">
@@ -107,7 +109,10 @@ export default function Sidebar({
         <div className="p-5 border-b border-sidebar-border flex flex-col justify-between gap-4 select-none">
           <div className="flex items-start justify-between">
             <div className="flex flex-col min-w-0">
-              <span className="font-serif font-semibold text-[21px] text-white tracking-tight leading-tight">Binary Blitz</span>
+              <div className="flex items-center gap-2">
+                <img src="/binary_blitz/logo.png" alt="Logo" className="w-6 h-6 object-contain" />
+                <span className="font-serif font-semibold text-[20px] text-white tracking-tight leading-none">Binary Blitz</span>
+              </div>
               <span className="text-[9px] text-sidebar-muted font-sans font-semibold mt-1.5 uppercase tracking-[0.12em]">Competitive Programming</span>
             </div>
             <button onClick={() => setIsCollapsed(true)} className="hidden md:flex w-6 h-6 rounded items-center justify-center hover:bg-sidebar-hover text-sidebar-muted hover:text-white transition-colors" title="Hide Sidebar">

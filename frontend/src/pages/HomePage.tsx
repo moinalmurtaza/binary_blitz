@@ -210,9 +210,7 @@ export default function HomePage() {
       <nav className="fixed top-0 left-0 right-0 z-50 h-[72px] border-b border-white/10 bg-[#26292D]/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5 group" aria-label="Binary Blitz home">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#A41034] to-[#C4122F] flex items-center justify-center shadow-md shadow-[rgba(164,16,52,0.30)] group-hover:shadow-[rgba(164,16,52,0.50)] transition-shadow">
-              <Zap size={16} className="text-white" />
-            </div>
+            <img src="/binary_blitz/logo.png" alt="Binary Blitz Logo" className="w-9 h-9 object-contain" />
             <span className="text-xl font-bold tracking-tight">
               <span className="text-white">Binary</span>
               <span className="text-[#A41034]"> Blitz</span>
@@ -545,9 +543,7 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
             <div className="lg:col-span-2">
               <Link to="/" className="inline-flex items-center gap-2 mb-4">
-                <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#A41034] to-[#C4122F] flex items-center justify-center">
-                  <Zap size={14} className="text-white" />
-                </div>
+                <img src="/binary_blitz/logo.png" alt="Binary Blitz Logo" className="w-8 h-8 object-contain" />
                 <span className="font-serif text-white text-2xl font-semibold tracking-tight">Binary Blitz</span>
               </Link>
               <p className="text-[11px] text-[#9A9A9A] font-sans font-normal uppercase tracking-[0.15em] mb-6">Competitive Programming</p>
