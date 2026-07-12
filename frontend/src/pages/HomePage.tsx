@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Code2, Trophy, BookOpen, ArrowRight, Shield, ChevronRight, Facebook, MessageCircle, Zap, Heart } from 'lucide-react';
 
@@ -37,71 +37,133 @@ function AcknowledgementCard({
 }: AcknowledgementCardProps) {
   const seed = avatarSeed || name.replace(/\s/g, '');
   const isHorizontal = variant === 'horizontal';
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // ── Motion values for 3-D tilt ─────────────────────────────────────────────
+  const rawX = useMotionValue(0); // -0.5 … +0.5
+  const rawY = useMotionValue(0);
+  const springCfg = { stiffness: 280, damping: 28, mass: 0.6 };
+  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-12, 12]), springCfg);
+  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [10, -10]), springCfg);
+
+  // Inner image parallax — moves opposite the tilt to create depth
+  const imgX = useSpring(useTransform(rawX, [-0.5, 0.5], [-18, 18]), springCfg);
+  const imgY = useSpring(useTransform(rawY, [-0.5, 0.5], [-14, 14]), springCfg);
+
+  // Glare position (follows mouse)
+  const glareX = useTransform(rawX, [-0.5, 0.5], ['0%', '100%']);
+  const glareY = useTransform(rawY, [-0.5, 0.5], ['0%', '100%']);
+  const glareOpacity = useSpring(0, { stiffness: 200, damping: 20 });
+
+  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (!cardRef.current) return;
+    const r = cardRef.current.getBoundingClientRect();
+    rawX.set((e.clientX - r.left) / r.width - 0.5);
+    rawY.set((e.clientY - r.top) / r.height - 0.5);
+    glareOpacity.set(0.18);
+  }
+
+  function onMouseLeave() {
+    rawX.set(0);
+    rawY.set(0);
+    glareOpacity.set(0);
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.55, delay }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className={`group flex flex-col ${isHorizontal ? 'md:flex-row' : ''} overflow-hidden rounded-xl border border-white/10 bg-[#1E222B] shadow-2xl hover:border-[#A41034]/50 transition-all duration-300 h-full`}
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      style={{ perspective: 900 }}
+      className="h-full"
     >
-      {/* Top/Left Image Portion */}
-      <div className={`relative w-full ${isHorizontal ? 'md:w-[40%] md:aspect-auto' : 'aspect-[16/10]'} overflow-hidden bg-zinc-900`}>
-        <img
-          src={bgImage}
-          alt={`Photo of ${name}`}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+      <motion.div
+        ref={cardRef}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
+        style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+        className={`group relative flex flex-col ${
+          isHorizontal ? 'md:flex-row' : ''
+        } overflow-hidden rounded-xl border border-white/10 bg-[#1E222B] shadow-2xl hover:border-[#A41034]/50 transition-colors duration-300 h-full cursor-default`}
+      >
+        {/* ── Glare layer ── */}
+        <motion.div
+          aria-hidden
+          style={{
+            opacity: glareOpacity,
+            background: `radial-gradient(circle at ${glareX} ${glareY}, rgba(255,255,255,0.55) 0%, transparent 65%)`,
+          }}
+          className="pointer-events-none absolute inset-0 z-30 rounded-xl"
         />
-        {/* Floating rounded avatar */}
-        <div className="absolute top-4 right-4 w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 shadow-lg">
-          <img
-            src={`https://api.dicebear.com/8.x/initials/svg?seed=${encodeURIComponent(seed)}&backgroundColor=7f1d1d,9f1239,be123c&fontFamily=Georgia&fontSize=40&fontWeight=700`}
-            alt={`Profile picture of ${name}`}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      </div>
 
-      {/* Bottom/Right Crimson Text Container */}
-      <div className="bg-[#4A1025] p-6 flex flex-col justify-between flex-1 relative min-h-[220px]">
-        <div>
-          <h3 className="font-serif text-2xl font-bold text-white mb-3 tracking-tight leading-tight">
-            {name}
-          </h3>
-          <div className="text-sm text-zinc-200/90 leading-relaxed mb-6 font-sans">
-            {description}
+        {/* ── Top / Left image ── */}
+        <div
+          className={`relative w-full ${
+            isHorizontal ? 'md:w-[40%] md:aspect-auto' : 'aspect-[16/10]'
+          } overflow-hidden bg-zinc-900`}
+        >
+          {/* Parallax wrapper — moves opposite to tilt */}
+          <motion.div
+            style={{ x: imgX, y: imgY, scale: 1.12 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <img
+              src={bgImage}
+              alt={`Photo of ${name}`}
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+
+          {/* Floating initials avatar */}
+          <div className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 shadow-lg">
+            <img
+              src={`https://api.dicebear.com/8.x/initials/svg?seed=${encodeURIComponent(seed)}&backgroundColor=7f1d1d,9f1239,be123c&fontFamily=Georgia&fontSize=40&fontWeight=700`}
+              alt={`Avatar of ${name}`}
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
 
-        {/* Action/Links Strip */}
-        <div className="flex items-center gap-3 pr-12">
-          <a
-            href={facebookUrl}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`${name} on Facebook`}
-            className="flex items-center gap-1 text-white/80 hover:text-white text-xs font-semibold bg-white/10 hover:bg-white/20 border border-white/15 px-2.5 py-1.5 rounded-lg transition-all"
-          >
-            <Facebook size={12} /> Facebook
-          </a>
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`${name} on WhatsApp`}
-            className="flex items-center gap-1 text-white/80 hover:text-white text-xs font-semibold bg-white/10 hover:bg-white/20 border border-white/15 px-2.5 py-1.5 rounded-lg transition-all"
-          >
-            <MessageCircle size={12} /> WhatsApp
-          </a>
-        </div>
+        {/* ── Bottom / Right text area ── */}
+        <div className="bg-[#4A1025] p-6 flex flex-col justify-between flex-1 relative min-h-[220px]">
+          <div>
+            <h3 className="font-serif text-2xl font-bold text-white mb-3 tracking-tight leading-tight">
+              {name}
+            </h3>
+            <div className="text-sm text-zinc-200/90 leading-relaxed mb-6 font-sans">
+              {description}
+            </div>
+          </div>
 
-        {/* Signature circle button with white arrow */}
-        <div className="absolute bottom-6 right-6 w-10 h-10 rounded-full bg-[#A41034] group-hover:bg-[#C4122F] text-white flex items-center justify-center transition-colors shadow-lg duration-250">
-          <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+          {/* Social links */}
+          <div className="flex items-center gap-3 pr-12">
+            <a
+              href={facebookUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`${name} on Facebook`}
+              className="flex items-center gap-1 text-white/80 hover:text-white text-xs font-semibold bg-white/10 hover:bg-white/20 border border-white/15 px-2.5 py-1.5 rounded-lg transition-all"
+            >
+              <Facebook size={12} /> Facebook
+            </a>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`${name} on WhatsApp`}
+              className="flex items-center gap-1 text-white/80 hover:text-white text-xs font-semibold bg-white/10 hover:bg-white/20 border border-white/15 px-2.5 py-1.5 rounded-lg transition-all"
+            >
+              <MessageCircle size={12} /> WhatsApp
+            </a>
+          </div>
+
+          {/* Arrow button */}
+          <div className="absolute bottom-6 right-6 w-10 h-10 rounded-full bg-[#A41034] group-hover:bg-[#C4122F] text-white flex items-center justify-center transition-colors shadow-lg">
+            <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+          </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
@@ -115,29 +177,51 @@ interface GroupProps {
   baseDelay?: number;
 }
 
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
 function AcknowledgementGroup({ groupLabel, groupSubtitle, accentColor, members, baseDelay = 0 }: GroupProps) {
   const isSingle = members.length === 1;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-3">
+    <motion.div
+      className="space-y-4"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: '-80px' }}
+      variants={containerVariants}
+    >
+      {/* Group label */}
+      <motion.div
+        className="flex items-center gap-3"
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: baseDelay }}
+      >
         <div className="w-1 h-10 rounded-full" style={{ background: accentColor }} />
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">{groupSubtitle}</p>
           <h3 className="text-sm font-bold text-zinc-200">{groupLabel}</h3>
         </div>
-      </div>
-      <div className={isSingle ? "grid grid-cols-1 gap-8 pt-2" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-2"}>
+      </motion.div>
+
+      {/* Cards grid */}
+      <div className={isSingle ? 'grid grid-cols-1 gap-8 pt-2' : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-2'}>
         {members.map((m, i) => (
-          <AcknowledgementCard 
-            key={m.name} 
-            {...m} 
+          <AcknowledgementCard
+            key={m.name}
+            {...m}
             variant={isSingle ? 'horizontal' : 'vertical'}
-            delay={baseDelay + i * 0.08} 
+            delay={baseDelay + i * 0.1}
           />
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
