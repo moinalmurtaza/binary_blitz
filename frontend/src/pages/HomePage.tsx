@@ -559,7 +559,7 @@ export default function HomePage() {
             {[
               { title: 'Platform', links: ['Dashboard', 'Problem Set', 'Live Contests', 'Leaderboard'] },
               { title: 'Curriculum', links: ['Learning Hub', 'Training Schedule', 'Community', 'Events Calendar'] },
-              { title: 'Resources', links: ['About Binary Blitz', 'OpenCourseWare', 'Contact Support', 'Privacy Policy'] },
+              { title: 'Resources', links: ['About Binary Blitz', 'Contact Support', 'Privacy Policy'] },
             ].map(col => (
               <div key={col.title}>
                 <h6 className="text-white text-[11px] font-bold uppercase tracking-[0.14em] mb-6 font-sans flex items-center gap-2">

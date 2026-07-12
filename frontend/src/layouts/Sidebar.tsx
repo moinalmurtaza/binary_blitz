@@ -115,10 +115,6 @@ export default function Sidebar({
             </button>
           </div>
           <div className="space-y-1.5 pt-2 border-t border-sidebar-border/50 text-[11px] text-sidebar-muted">
-            <div className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer">
-              <Layers size={11} className="text-sidebar-accent" />
-              <span>OpenCourseWare</span>
-            </div>
             <div className="flex flex-col mt-2 pt-1 border-t border-sidebar-border/30 text-[10px]">
               <span className="font-semibold text-zinc-400">{user?.name || 'David J. Malan'} ({user?.role || 'Lead'})</span>
               <a href={`mailto:${user?.email || 'malan@harvard.edu'}`} className="hover:underline text-sidebar-accent/80 hover:text-sidebar-accent flex items-center gap-1 mt-0.5"><Mail size={9} /> {user?.email || 'malan@harvard.edu'}</a>

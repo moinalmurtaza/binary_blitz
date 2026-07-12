@@ -274,7 +274,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               {[
                 { title: 'Platform', links: ['Dashboard', 'Problems', 'Contests', 'Leaderboard'] },
                 { title: 'Learning', links: ['Learning Hub', 'Schedule', 'Community', 'Calendar'] },
-                { title: 'Info', links: ['About Binary Blitz', 'OpenCourseWare', 'Contact', 'Privacy'] },
+                { title: 'Info', links: ['About Binary Blitz', 'Contact', 'Privacy'] },
               ].map(col => (
                 <div key={col.title}>
                   <h6 className="text-white text-[9px] font-bold uppercase tracking-[0.14em] mb-3 font-sans">{col.title}</h6>
