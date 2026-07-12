@@ -476,7 +476,7 @@ export default function HomePage() {
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 0%, rgba(164,16,52,0.07) 0%, transparent 70%)' }} />
 
-        <div className="max-w-4xl mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10">
           {/* Section header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
